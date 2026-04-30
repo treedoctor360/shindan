@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>樹木点検・診断システム 利用マニュアル</title>
+  <title>樹木点検・診断システム 利用マニュアル v26.6</title>
   <style>
     :root {
       --green-dark: #2d5016;
@@ -168,6 +168,9 @@
     <li><a href="#sec-map">全体マップの使いかた（タブ③）</a></li>
     <li><a href="#sec-criteria">判定基準の見かた（タブ④）</a></li>
     <li><a href="#sec-export">データの出力・バックアップ</a></li>
+    <li><a href="#sec-gas">📤 スプレッドシートへ送信（GAS連携）</a></li>
+    <li><a href="#sec-mail">📧 メールで送信</a></li>
+    <li><a href="#sec-settings">⚙️ 設定タブの使いかた</a></li>
     <li><a href="#sec-caution">ご利用上の注意</a></li>
     <li><a href="criteria.html" style="font-weight:700; color:#1565c0;">📖 詳細判定基準を見る</a></li>
   </ol>
@@ -185,6 +188,8 @@
       <li>写真撮影・写真への書き込み</li>
       <li>地図上での全樹木位置表示</li>
       <li>Excel・CSV・JSONでデータ出力</li>
+      <li>Googleスプレッドシートへのデータ送信（GAS連携）</li>
+      <li>メールでのCSVデータ送信</li>
     </ul>
   </div>
 </section>
@@ -222,6 +227,7 @@
         <tr><td>📚 記録一覧</td><td>保存済みの記録を一覧表示・検索・編集・削除する</td></tr>
         <tr><td>🗺️ 全体マップ</td><td>登録した全樹木の位置を地図上で確認する</td></tr>
         <tr><td>📖 判定基準</td><td>活力度・健全度・総合判定の基準を確認する</td></tr>
+        <tr><td>⚙️ 設定</td><td>スプレッドシート送信（GAS）・メール送信の設定を行う</td></tr>
       </tbody>
     </table>
   </div>
@@ -310,6 +316,11 @@
   <div class="section-body">
     <p>保存済みの点検記録を一覧表示・検索・編集・削除できます。</p>
     <p>「📊 全件Excel出力」「📄 CSV出力」「📦 JSONバックアップ」など、データ出力・バックアップもここから行えます。</p>
+    <p style="margin-top:10px;">また、送信ボタンから事務所のスプレッドシートやメールへデータを送ることができます。</p>
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;">
+      <div style="background:#e8f3df; border-radius:10px; padding:10px 14px; font-size:0.85rem; font-weight:700; color:#2d5016;">📤 スプレッドシートへ送信</div>
+      <div style="background:#e3f2fd; border-radius:10px; padding:10px 14px; font-size:0.85rem; font-weight:700; color:#1565c0;">📧 メールで送信</div>
+    </div>
     <div class="tip">📄 CSV出力は「樹木番号,樹種名,点検者,所在地,調査日,総合判定,必要な処置,緯度X,経度Y」の形式で出力され、GISなどに取り込めます。</div>
   </div>
 </section>
@@ -344,13 +355,100 @@
   </div>
 </section>
 
+<section class="section" id="sec-gas">
+  <div class="section-title"><span>🔟</span>📤 スプレッドシートへ送信（GAS連携）</div>
+  <div class="section-body">
+    <p>現場で収集した点検データを、事務所の<strong>Google スプレッドシート</strong>にリアルタイムで送信できます。Google Apps Script（GAS）を使った連携機能です。</p>
+
+    <div class="note">⚠️ この機能を使うには、事前にGoogleスプレッドシートとGASの設定が必要です。スマートフォン・タブレットから初めて使う場合は、PCでの準備作業をお願いします。</div>
+
+    <div class="step-card" style="margin-top:16px;">
+      <div class="step-head"><div class="step-num">1</div>Googleスプレッドシートを新規作成</div>
+      <div class="step-body"><p>Googleドライブで新しいスプレッドシートを作成し、わかりやすい名前をつけます（例：「樹木点検記録2025」）。</p></div>
+    </div>
+    <div class="step-card">
+      <div class="step-head"><div class="step-num">2</div>Apps Scriptを開く</div>
+      <div class="step-body"><p>スプレッドシートのメニュー「拡張機能」→「Apps Script」を開きます。エディタ画面が開きます。</p></div>
+    </div>
+    <div class="step-card">
+      <div class="step-head"><div class="step-num">3</div>コード.gsを貼り付ける</div>
+      <div class="step-body">
+        <p>配布された <strong>コード.gs</strong> の内容をすべてエディタに貼り付けて保存します（Ctrl+S）。</p>
+        <p style="margin-top:8px;font-size:0.85rem; color:#555;">必要に応じて <code>ACCESS_TOKEN</code>（パスワード）を変更してください。</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-head"><div class="step-num">4</div>ウェブアプリとしてデプロイ</div>
+      <div class="step-body">
+        <p>「デプロイ」→「新しいデプロイ」→「ウェブアプリ」を選択。</p>
+        <ul style="padding-left:18px; margin-top:6px; font-size:0.88rem;">
+          <li><strong>実行ユーザー</strong>：自分</li>
+          <li><strong>アクセスできるユーザー</strong>：全員（または Googleアカウントを持つ全員）</li>
+        </ul>
+        <p style="margin-top:8px;">「デプロイ」ボタンを押すと <strong>ウェブアプリURL</strong> が表示されます。このURLをコピーしてください。</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-head"><div class="step-num">5</div>アプリの設定タブに入力</div>
+      <div class="step-body">
+        <p>このアプリの「⚙️ 設定」タブを開き、コピーしたURLと設定したトークンを入力して「💾 設定を保存」してください。</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-head"><div class="step-num">6</div>記録一覧から送信</div>
+      <div class="step-body">
+        <p>「📚 記録一覧」タブ下部の「📤 スプレッドシートへ送信」ボタンを押します。送信件数を選んで「送信する」を押すと、スプレッドシートの「点検記録」シートに自動的に書き込まれます。</p>
+        <div class="tip">💡 樹木Noが重複する場合は上書き（更新）されます。初めての登録の場合は追記されます。</div>
+        <div class="note">⚠️ 写真データは容量が大きいため送信されません。テキストデータのみ送信されます。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sec-mail">
+  <div class="section-title"><span>1️⃣1️⃣</span>📧 メールで送信</div>
+  <div class="section-body">
+    <p>スプレッドシート連携が難しい場合や、担当者へ手軽にデータを送りたい場合はメール送信を使います。</p>
+
+    <div class="step-card">
+      <div class="step-head"><div class="step-num">1</div>設定タブでメールアドレスを入力</div>
+      <div class="step-body"><p>「⚙️ 設定」→「送信先メールアドレス」に送り先を入力して保存します。</p></div>
+    </div>
+    <div class="step-card">
+      <div class="step-head"><div class="step-num">2</div>記録一覧から送信</div>
+      <div class="step-body"><p>「📧 メールで送信」ボタンを押すと、点検データをCSV形式に変換してメールアプリが開きます。内容を確認して「送信」してください。</p></div>
+    </div>
+
+    <div class="note">⚠️ データ量が多いとメールアプリが正常に開かない場合があります。その際はCSVファイルが自動でダウンロードされますので、手動で添付してください。</div>
+    <div class="tip">💡 スプレッドシート連携と比べて設定が簡単です。GASの設定が完了するまでの暫定的な送信手段としてもご活用いただけます。</div>
+  </div>
+</section>
+
+<section class="section" id="sec-settings">
+  <div class="section-title"><span>1️⃣2️⃣</span>⚙️ 設定タブの使いかた</div>
+  <div class="section-body">
+    <table>
+      <thead><tr><th>設定項目</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td><strong>GAS Web アプリ URL</strong></td><td>Google Apps Scriptのデプロイ後に発行されるURL。スプレッドシート送信に必要。</td></tr>
+        <tr><td><strong>アクセストークン</strong></td><td>GASスクリプト内のACCESS_TOKENと一致させる。不正送信を防ぐパスワード。</td></tr>
+        <tr><td><strong>送信者名</strong></td><td>スプレッドシートの「送信者」列に記録される名前。</td></tr>
+        <tr><td><strong>送信先メールアドレス</strong></td><td>メール送信先のアドレス。</td></tr>
+        <tr><td><strong>件名テンプレート</strong></td><td>メール件名の初期値。</td></tr>
+      </tbody>
+    </table>
+    <div class="tip">💾 設定はこの端末のブラウザに保存されます（localStorage）。ブラウザデータを削除すると設定が消えるため、再入力が必要です。</div>
+    <p style="margin-top:10px;">「🔌 GAS接続テスト」ボタンで、入力したURLへの接続を事前に確認できます。</p>
+  </div>
+</section>
+
 <section class="section" id="sec-caution">
   <div class="section-title"><span>⚠️</span>ご利用上の注意</div>
   <div class="section-body">
     <div class="note" style="font-size:0.92rem; line-height:1.8;">
       <ul style="padding-left:18px;">
         <li>診断結果は<strong>目安</strong>です。最終判断は<strong>専門家</strong>が行ってください。</li>
-        <li>C・D判定や危険木が疑われる場合は、行政や専門家<strong>(樹木医等)<strong>に相談してください。</li>
+        <li>C・D判定や危険木が疑われる場合は、行政や専門家<strong>(樹木医等)</strong>に相談してください。</li>
         <li>本システムの利用により生じた損害について、開発者は一切の責任を負いません。</li>
         <li>データは端末内に保存されます。定期的にバックアップをお願いします。</li>
       </ul>
@@ -359,7 +457,8 @@
 </section>
 
 <footer class="site-footer">
-  <p>樹木点検・診断システム 利用マニュアル</p>
+  <p>樹木点検・診断システム 利用マニュアル v26.6</p>
 </footer>
 
 </body>
+</html>
