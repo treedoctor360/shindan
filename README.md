@@ -1,1 +1,1 @@
-# shindan27AIDATABASE pre
+# shindan27AI,データベース化試作 pre
